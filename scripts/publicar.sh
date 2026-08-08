@@ -32,14 +32,18 @@ if grep -rIl -e 'file://' -e '/Users/' docs/ 2>/dev/null | grep -q .; then
 fi
 ok "sin rutas locales"
 
-if grep -rIEl '(ghp_|github_pat_|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)' docs/ content/ scripts/ 2>/dev/null | grep -q .; then
+# --exclude: este mismo archivo contiene el patrón de búsqueda y, sin excluirlo,
+# la comprobación se detectaría a sí misma y abortaría siempre.
+if grep -rIEl --exclude=publicar.sh \
+     '(ghp_|github_pat_|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)' \
+     docs/ content/ scripts/ 2>/dev/null | grep -q .; then
   echo "  ✗ Posibles credenciales en el proyecto. Abortado."
   exit 1
 fi
 ok "sin credenciales"
 
 if pdftotext docs/assets/documentos/cv-jorge-luis-congacha.pdf - 2>/dev/null | grep -qE '3145692372'; then
-  echo "  ✗ El CV publicado todavía tiene el teléfono. Ejecuta scripts/preparar_cv.py"
+  echo "  ✗ El CV publicado todavía tiene el teléfono. Ejecuta scripts/preparar_documentos.py"
   exit 1
 fi
 ok "el CV publicado no lleva teléfono"
@@ -69,7 +73,11 @@ if ! git remote get-url origin >/dev/null 2>&1; then
   ok "remoto configurado → $USUARIO/$REPO"
 fi
 
-if git push -u origin main 2>/dev/null; then
+# Sin terminal interactiva, git se queda esperando credenciales para siempre.
+# Con esto falla rápido y se muestran las instrucciones de abajo.
+export GIT_TERMINAL_PROMPT=${GIT_TERMINAL_PROMPT:-1}
+
+if git push -u origin main; then
   ok "subido"
   echo
   azul "Listo. El sitio estará en https://$USUARIO.github.io en 1–2 minutos."

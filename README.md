@@ -44,7 +44,7 @@ web_jorgeluis/
 │   ├── probar.py                     pruebas automáticas en 5 anchos
 │   ├── extraer_graficos.py           saca los gráficos del .docx y los optimiza
 │   ├── generar_imagenes.py           favicon + tarjetas para compartir en X
-│   ├── preparar_cv.py                copia del CV sin el teléfono
+│   ├── preparar_documentos.py                CV sin teléfono + PDF sin metadatos
 │   └── publicar.sh                   despliegue a GitHub Pages
 │
 ├── docs/                         ← EL SITIO PUBLICADO (generado, no editar a mano)
@@ -259,7 +259,7 @@ el gráfico principal. Se guarda en `docs/assets/img/social/<slug>.png`.
 ## 7. Cómo actualizar el CV
 
 1. Reemplazar `originales/CV - Jorge Luis Congacha.pdf` por el nuevo.
-2. `python3 scripts/preparar_cv.py`
+2. `python3 scripts/preparar_documentos.py`
 
 El script genera `docs/assets/documentos/cv-jorge-luis-congacha.pdf` **borrando
 el número de teléfono** (redacción real: los glifos se eliminan del PDF, no se
@@ -402,7 +402,7 @@ típica). Para regenerarlas: `python3 scripts/descargar_fuentes.py`.
 
 2. **`originales/` no se toca.** Es la copia de seguridad de los archivos de
    partida. El CV que hay ahí **tiene el teléfono** y por eso no se publica: lo
-   que se publica es la copia redactada que produce `scripts/preparar_cv.py`.
+   que se publica es la copia redactada que produce `scripts/preparar_documentos.py`.
 
 3. **Al cambiar la URL del sitio** hay que editar `url` en `content/sitio.json`
    y reconstruir. Si no, las URLs canónicas, el sitemap y las tarjetas de X

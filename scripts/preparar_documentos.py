@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """
-Genera la copia pública del CV: la misma hoja, pero sin el número de teléfono.
+Prepara los PDF que se publican en el sitio.
 
-Usa redacción real de PyMuPDF (add_redact_annot + apply_redactions), que borra
-los glifos del contenido del PDF. No es un rectángulo encima: si alguien copia
-el texto o lo pasa por un extractor, el número ya no está.
+1. CV: copia sin el número de teléfono. Usa redacción real de PyMuPDF
+   (add_redact_annot + apply_redactions), que borra los glifos del contenido
+   del PDF. No es un rectángulo encima: si alguien copia el texto o lo pasa por
+   un extractor, el número ya no está. Después lo verifica.
 
-El PDF original no se toca: queda en originales/.
+2. PDF de cada nota: se limpian los metadatos, que delatan la versión exacta
+   del sistema operativo y el software con que se exportó.
 
-Uso:  python3 scripts/preparar_cv.py
+Los PDF originales no se tocan: quedan en originales/.
+
+Uso:  python3 scripts/preparar_documentos.py
 """
 import os
 import re
@@ -22,6 +26,37 @@ DESTINO = os.path.join(RAIZ, "docs", "assets", "documentos", "cv-jorge-luis-cong
 
 # Lo que no debe quedar en la copia pública.
 PATRON_TELEFONO = re.compile(r"\+?\d[\d\s\-().]{8,}\d")
+
+
+# PDF de notas: origen en originales/ -> copia publicada en docs/
+NOTAS = [
+    ("narino_paz_territorial_coca_otros.pdf",
+     "narino-paz-territorial-homicidios-coca.pdf",
+     "Nariño: paz territorial, homicidios, coca y otros indicadores"),
+]
+
+
+def limpiar_notas():
+    """Quita los metadatos que revelan sistema operativo y software."""
+    for origen, destino, titulo in NOTAS:
+        ruta_origen = os.path.join(RAIZ, "originales", origen)
+        ruta_destino = os.path.join(RAIZ, "docs", "assets", "documentos", destino)
+        if not os.path.exists(ruta_origen):
+            print(f"  ! no está {origen}, se omite")
+            continue
+        doc = fitz.open(ruta_origen)
+        doc.set_metadata({
+            "title": titulo,
+            "author": "Jorge Luis Congacha",
+            "subject": "Análisis",
+            "keywords": "",
+            "creator": "",
+            "producer": "",
+        })
+        doc.save(ruta_destino, garbage=4, deflate=True, clean=True)
+        doc.close()
+        print(f"  {destino}: metadatos limpios "
+              f"({os.path.getsize(ruta_destino) // 1024} KB)")
 
 
 def main():
@@ -68,8 +103,9 @@ def main():
               + ", ".join(sorted(set(borrados))))
     else:
         print("  no se encontró ningún teléfono que eliminar")
-    print(f"  copia pública en docs/assets/documentos/ "
+    print(f"  cv-jorge-luis-congacha.pdf: copia pública "
           f"({os.path.getsize(DESTINO) // 1024} KB)")
+    limpiar_notas()
 
 
 if __name__ == "__main__":

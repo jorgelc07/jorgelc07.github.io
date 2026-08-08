@@ -260,7 +260,7 @@ accesible a cualquiera y a los rastreadores automáticos que recogen datos de
 contacto. La página «Sobre mí» publica solo el correo institucional y la cuenta
 de X, que ya son públicos.
 
-**Cómo se hace:** `scripts/preparar_cv.py` usa redacción real de PyMuPDF, que
+**Cómo se hace:** `scripts/preparar_documentos.py` usa redacción real de PyMuPDF, que
 elimina los glifos del contenido del PDF. No es un rectángulo blanco encima
 —ese truco deja el texto extraíble con copiar y pegar— y el script lo verifica
 después: vuelve a extraer el texto del PDF publicado y falla si el número
