@@ -1,7 +1,7 @@
 ---
 titulo: Nariño: paz territorial, homicidios, coca y otros indicadores
 slug: narino-paz-territorial-homicidios-coca
-fecha: 2026-08-03
+fecha: 2026-08-08
 autor: Jorge Luis Congacha
 categoria: Conflicto y violencia
 temas: [Nariño, Conflicto y violencia, Datos]

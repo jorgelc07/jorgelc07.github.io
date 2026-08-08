@@ -534,7 +534,7 @@ ${recientes}
     const contenido = `    <div class="contenedor contenedor--estrecho">
       <header class="cabecera-seccion">
         <h1>Análisis</h1>
-        <p class="bajada">Notas propias sobre política, elecciones, economía, conflicto y desarrollo territorial, con los datos y las fuentes a la vista.</p>
+        <p class="bajada">Notas sobre política, elecciones, economía, conflicto y desarrollo territorial.</p>
       </header>
       <div class="lista-notas lista-notas--completa">
         ${articulos.map(a => reseña(a, sitio, p)).join('\n        ')}
