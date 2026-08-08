@@ -45,9 +45,11 @@ ANCHOS = [
 PAGINAS = [
     ("portada", "/"),
     ("analisis", "/analisis/"),
-    ("nota", "/articulos/narino-paz-territorial-homicidios-coca/"),
+    ("nota-narino", "/articulos/narino-paz-territorial-homicidios-coca/"),
+    ("nota-elecciones", "/articulos/elecciones-coca-violencia-mapa-electoral-narino/"),
     ("sobre-mi", "/sobre-mi/"),
     ("tema", "/temas/narino/"),
+    ("tema-elecciones", "/temas/elecciones/"),
     ("404", "/404.html"),
 ]
 

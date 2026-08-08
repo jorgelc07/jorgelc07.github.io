@@ -33,6 +33,9 @@ NOTAS = [
     ("narino_paz_territorial_coca_otros.pdf",
      "narino-paz-territorial-homicidios-coca.pdf",
      "Nariño: paz territorial, homicidios, coca y otros indicadores"),
+    ("nota2_elecciones_coca_violencia/Elecciones_coca_violencia_narino.pdf",
+     "elecciones-coca-violencia-mapa-electoral-narino.pdf",
+     "Elecciones, coca y violencia: mapa electoral de Nariño"),
 ]
 
 

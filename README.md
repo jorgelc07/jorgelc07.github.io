@@ -446,9 +446,11 @@ típica). Para regenerarlas: `python3 scripts/descargar_fuentes.py`.
 
 ---
 
-## 14. Sobre la primera nota
+## 14. Sobre las notas publicadas
 
-Procede de `narino_paz_territorial_coca_otros copy.docx` (versión 10, 11
+### 14.1 «Nariño: paz territorial, homicidios, coca y otros indicadores»
+
+Publicada el 8 de agosto de 2026. Procede de `narino_paz_territorial_coca_otros copy.docx` (versión 10, 11
 figuras). El texto se transcribió **íntegro, sin modificar ni resumir**.
 
 Lo único que se añadió a la estructura del documento es el subtítulo
@@ -465,3 +467,56 @@ existe dentro del documento, porque se incorporó después de la versión 9.
 Los pies de figura y las notas de fuente están transcritos del propio documento
 y de los pies impresos dentro de cada gráfico. No se inventó ninguna cifra,
 fuente ni afirmación.
+
+### 14.2 «Elecciones, coca y violencia: mapa electoral de Nariño»
+
+Publicada el 9 de junio de 2026, que es la fecha en que apareció originalmente
+en Página10.com. Se usó esa fecha y no la de incorporación al sitio para que el
+orden cronológico del archivo refleje cuándo se escribió cada cosa.
+
+Fuentes utilizadas para reconstruirla: el `.docx` y el `.pdf` finales del
+proyecto de origen y la versión publicada en Página10.com. El texto se
+transcribió **íntegro y sin modificar**, con sus tres subtítulos originales
+(«Presencia de coca», «Violencia y cambio electoral», «Lectura por
+subregiones»). No se añadió ningún subtítulo.
+
+Al final de la nota se añadió una línea que enlaza a la publicación original en
+Página10.com. Es la práctica correcta cuando un texto se republica en otro
+sitio: reconoce dónde salió primero sin renunciar a que esta versión sea la
+canónica para buscadores.
+
+Las 8 figuras se extrajeron del `.docx`. Se verificó por checksum que coinciden
+exactamente con los PNG finales de la carpeta de origen (versiones `v3` y `v5`).
+
+**Dos figuras venían con textos superpuestos** y se recortó solo la banda
+ilegible; el contenido recortado se trasladó a la leyenda HTML, donde se lee
+bien y además queda seleccionable:
+
+| Figura | Problema en el original | Qué se hizo |
+|---|---|---|
+| 7 (promedios por subregión) | El título chocaba con su subtítulo, ambos ilegibles | Se recortaron las filas 0–41. El título va ahora en el pie de figura y el subtítulo, en la nota |
+| 3 (cambio electoral y coca) | La línea de fuente al pie chocaba con el crédito del autor | Se recortó desde la fila 979. La nota de la figura, que está encima, se conserva |
+
+Los recortes se aplican solo a la copia web y están declarados en
+`scripts/extraer_graficos.py`, en el bloque `recortes`. Los originales quedan
+intactos en `originales/nota2_elecciones_coca_violencia/graficos/`.
+
+> **Por qué no se usó la versión `v2` de la figura 7,** que sí tiene el título
+> bien: sus notas al pie filtran el nombre de un archivo de trabajo interno
+> (`Base_master_2026_robustez.dta`), que no debe aparecer en una publicación.
+> La `v3` corrigió esas notas pero rompió el título; recortar el título de la
+> `v3` conserva lo bueno de ambas.
+
+### 14.3 Limitaciones conocidas
+
+- Las figuras de la segunda nota son de 1.500 px de ancho (1.353 las de
+  dispersión), por debajo de los 1.600 px del resto. Son las de mayor
+  resolución disponibles: no se ampliaron, porque escalar hacia arriba añade
+  peso sin añadir detalle. Se ven bien, pero con menos margen en pantallas de
+  alta densidad.
+- La experiencia de Colombia Sostenible en «Sobre mí» se redactó con lo que hay
+  confirmado y **sin fechas**, porque no aparece en el CV ni en ningún otro
+  material del proyecto. Conviene añadir el periodo y, si aplica, quién dirigió
+  la investigación.
+- La segunda nota trabaja con datos electorales **preliminares** (preconteo,
+  boletín #67). Así lo dicen sus propias figuras y así quedó en las notas.
