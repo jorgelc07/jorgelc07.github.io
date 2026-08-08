@@ -1,0 +1,21 @@
+{
+  "_comentario": "Configuración global del sitio. Al cambiar 'url' hay que volver a ejecutar: node scripts/build.js",
+
+  "url": "https://jorgelc07.github.io",
+
+  "nombre": "Jorge Luis Congacha",
+  "lema": "Análisis · Datos · Política · Territorio",
+  "autor": "Jorge Luis Congacha",
+  "correo": "j.congacha@uniandes.edu.co",
+  "x": "Jorgelc07",
+
+  "descripcion": "Notas de análisis basadas en datos sobre política, elecciones, economía, conflicto y desarrollo territorial en Nariño y Colombia.",
+  "presentacion": "Una publicación personal de análisis basado en evidencia: política, elecciones, economía, conflicto y desarrollo territorial en Nariño y Colombia. Cada nota muestra los datos y cita sus fuentes.",
+  "bioCorta": "Jorge Luis Congacha es administrador de empresas de la Universidad de Nariño y estudiante de la Maestría en Economía (PEG) de la Universidad de los Andes. Trabaja como asistente de investigación en economía política, desarrollo, conflicto y violencia, y construye y analiza bases de datos con Stata, R, Python y QGIS.",
+
+  "cv": "assets/documentos/cv-jorge-luis-congacha.pdf",
+  "imagenSocial": "assets/img/social/portada.png",
+
+  "color": "#1B3B6F",
+  "papel": "#FBF8F3"
+}
