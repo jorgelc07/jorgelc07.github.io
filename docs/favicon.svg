@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Jorge Luis Congacha">
+  <rect width="64" height="64" fill="#1B3B6F"/>
+  <rect x="12" y="14" width="40" height="2.5" fill="#FBF8F3"/>
+  <text x="32" y="47" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="700"
+        letter-spacing="1" fill="#FBF8F3">JC</text>
+</svg>
