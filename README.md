@@ -3,8 +3,8 @@
 Sitio web personal de análisis, datos y artículos.
 Estático, sin backend, sin base de datos y con hosting gratuito.
 
-**URL pública:** https://jorgelc07.github.io
-**Repositorio:** https://github.com/jorgelc07/jorgelc07.github.io
+**URL pública:** https://jorgelc07.github.io — **en línea desde el 8 de agosto de 2026**
+**Repositorio:** https://github.com/jorgelc07/jorgelc07.github.io (público)
 
 ---
 
@@ -296,19 +296,37 @@ Deja una captura de cada página y cada ancho en `pruebas/capturas/`
 
 ## 9. Cómo publicar
 
-La primera vez:
+El repositorio ya existe, el remoto ya está configurado y GitHub Pages ya está
+activo sirviendo `/docs`. **No hay que volver a configurar nada.**
+
+### Una sola vez: dejar la sesión de GitHub guardada
+
+El despliegue inicial se hizo con un token temporal que **no se guardó** en el
+equipo. Para no tener que autenticarse en cada publicación, ejecuta una vez:
 
 ```bash
-bash scripts/publicar.sh
+gh auth login
 ```
 
-Después, cada cambio:
+Responde: `GitHub.com` → `HTTPS` → `Y` (autenticar Git) → `Login with a web
+browser`, y pega el código que aparece. Queda guardado en el llavero de macOS.
+
+`gh` ya está instalado (es gratuito y de código abierto). Si algún día no lo
+estuviera: `brew install gh`.
+
+### Después, cada cambio
 
 ```bash
 node scripts/build.js
 git add -A
 git commit -m "Descripción del cambio"
 git push
+```
+
+O, si prefieres que además compruebe que no se publique nada indebido:
+
+```bash
+bash scripts/publicar.sh "Descripción del cambio"
 ```
 
 GitHub Pages reconstruye solo. Tarda entre 30 segundos y 2 minutos.
@@ -319,7 +337,8 @@ El estado del despliegue se ve en la pestaña **Actions** del repositorio.
 ## 10. Hosting
 
 **GitHub Pages**, sirviendo la carpeta `/docs` de la rama `main` del
-repositorio `jorgelc07/jorgelc07.github.io`.
+repositorio `jorgelc07/jorgelc07.github.io`. Ya configurado y funcionando,
+con HTTPS forzado.
 
 - Gratis mientras el repositorio sea público. Sin límite de tiempo.
 - HTTPS con certificado automático.
