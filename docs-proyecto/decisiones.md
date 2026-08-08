@@ -179,6 +179,15 @@ Usar el mismo serif en titular y cuerpo da unidad de publicación; el contraste
 lo aporta Inter en navegación, metadatos y pies de figura, que es donde el
 lector necesita distinguir «esto es contenido» de «esto es señalización».
 
+> **Detalle conocido y sin consecuencias:** abriendo el sitio con doble clic
+> (`file://`), la consola muestra un error al cargar la tipografía. Es el
+> `<link rel="preload" as="font" crossorigin>`, que bajo `file://` no pasa la
+> comprobación de origen. La tipografía se carga igual por la vía normal
+> (`@font-face`) y el texto se ve correcto — comprobado con `document.fonts`.
+> Sobre `http://`, que es como se sirve en producción, no ocurre. El preload
+> se mantiene porque adelanta la descarga de la fuente y mejora la primera
+> impresión de la página.
+
 **Auto-alojadas y no desde Google Fonts.** Evita una conexión a un tercero en
 cada visita, elimina un punto de fallo externo, mejora la privacidad de quien
 lee y hace el sitio más rápido. Solo se conservan los subconjuntos latin y
