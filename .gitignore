@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# OneDrive
+*.tmp
+~$*
+
+# El CV original incluye el número de teléfono y este repositorio es PÚBLICO.
+# Solo se publica la copia redactada que genera scripts/preparar_cv.py y que
+# vive en docs/assets/documentos/. El original se queda en OneDrive.
+originales/CV - Jorge Luis Congacha.pdf
+
+# Caché de tipografías TTF que solo se usa para regenerar las imágenes sociales.
+# Se vuelve a descargar sola cuando hace falta.
+scripts/.cache-fuentes/
+
+# Capturas de las pruebas: se regeneran con scripts/probar.py y pesan mucho.
+pruebas/capturas/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editores
+.vscode/
+.idea/
+*.swp
