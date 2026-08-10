@@ -238,7 +238,9 @@ function figura(c, ctx) {
 function cabecera(sitio, p, pagina) {
   const enlaces = [
     ['Inicio', 'index.html'],
-    ['Análisis', 'analisis/index.html'],
+    // La etiqueta es "Publicaciones" pero la ruta sigue siendo /analisis/:
+    // cambiar la URL rompería los enlaces ya compartidos y el sitemap indexado.
+    ['Publicaciones', 'analisis/index.html'],
     ['Sobre mí', 'sobre-mi/index.html'],
   ];
   const items = enlaces.map(([texto, destino]) => {
@@ -256,7 +258,7 @@ function cabecera(sitio, p, pagina) {
       <nav class="menu" aria-label="Secciones">
         <ul>
         ${items}
-        <li><a class="menu__cv" href="${rel(p, sitio.cv)}">CV<span class="menu__cv-largo"> (PDF)</span></a></li>
+        <li><a class="menu__cv" href="${rel(p, sitio.cv)}">CV</a></li>
         </ul>
       </nav>
     </div>
@@ -269,14 +271,14 @@ function pie(sitio, p) {
       <p class="pie__marca">${esc(sitio.nombre)}</p>
       <p class="pie__lema">${esc(sitio.lema)}</p>
       <ul class="pie__enlaces">
-        <li><a href="${rel(p, 'analisis/index.html')}">Análisis</a></li>
+        <li><a href="${rel(p, 'analisis/index.html')}">Publicaciones</a></li>
         <li><a href="${rel(p, 'sobre-mi/index.html')}">Sobre mí</a></li>
-        <li><a href="${rel(p, sitio.cv)}">CV (PDF)</a></li>
+        <li><a href="${rel(p, sitio.cv)}">CV</a></li>
         <li><a href="https://x.com/${sitio.x}" rel="me noopener">X · @${esc(sitio.x)}</a></li>
         <li><a href="mailto:${esc(sitio.correo)}">${esc(sitio.correo)}</a></li>
         <li><a href="${rel(p, 'feed.xml')}">RSS</a></li>
       </ul>
-      <p class="pie__legal">© ${new Date().getFullYear()} ${esc(sitio.autor)}. Los textos y gráficos son de elaboración propia salvo indicación en contrario; las fuentes de los datos se citan en cada nota.</p>
+      <p class="pie__legal">© ${new Date().getFullYear()} ${esc(sitio.autor)}.</p>
     </div>
   </footer>`;
 }
@@ -358,6 +360,41 @@ function reseña(a, sitio, p, { grande = false } = {}) {
     </article>`;
 }
 
+/**
+ * Colección «Personajes»: perfiles de la serie «Personaje 10» que se
+ * publicaron en Página10.com. No se republica el texto, solo se enlaza al
+ * original, así que cada entrada es un enlace externo que abre en otra
+ * pestaña. rel="noopener noreferrer" es obligatorio en enlaces con target
+ * _blank: sin noopener la página de destino puede manipular la nuestra.
+ */
+function entradaPersonaje(pj) {
+  const desc = pj.descriptor
+    ? `<span class="personaje__descriptor">${esc(pj.descriptor)}</span>` : '';
+  const fecha = pj.fecha
+    ? `<time class="personaje__fecha" datetime="${pj.fecha}">${fechaLarga(pj.fecha)}</time>`
+    : '';
+  return `<li class="personaje">
+          <a class="personaje__enlace" href="${pj.url}" target="_blank" rel="noopener noreferrer">
+            <span class="personaje__texto">
+              <span class="personaje__persona">${esc(pj.persona)}</span>${desc}
+            </span>${fecha}
+          </a>
+        </li>`;
+}
+
+/** Agrupa por año, de más reciente a más antiguo. */
+function personajesPorAnio(lista) {
+  const mapa = new Map();
+  for (const pj of lista) {
+    if (!mapa.has(pj.anio)) mapa.set(pj.anio, []);
+    mapa.get(pj.anio).push(pj);
+  }
+  return [...mapa.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([anio, items]) => [anio, items.sort((a, b) =>
+      (b.fecha || '').localeCompare(a.fecha || '') || a.persona.localeCompare(b.persona))]);
+}
+
 function listaTemas(temas, p, sitio) {
   return `<ul class="temas">
       ${temas.map(t =>
@@ -404,6 +441,25 @@ function main() {
   }
   const temas = [...mapaTemas.values()].sort((a, b) => b.notas.length - a.notas.length
     || a.nombre.localeCompare(b.nombre));
+
+  // -- Personajes ------------------------------------------------------------
+  // Colección aparte: son enlaces a artículos publicados en Página10.com, no
+  // contenido de este sitio. Por eso no entran en `temas` ni en el RSS, que
+  // están reservados a lo que se publica aquí. Solo se cargan las entradas con
+  // la autoría verificada; el resto queda en el archivo como candidatas.
+  let personajes = [];
+  const rutaPersonajes = path.join(CONTENIDO, 'personajes.json');
+  if (fs.existsSync(rutaPersonajes)) {
+    const datos = JSON.parse(fs.readFileSync(rutaPersonajes, 'utf8'));
+    personajes = (datos.personajes || [])
+      .filter(pj => pj.autoria_verificada)
+      .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '')
+        || a.persona.localeCompare(b.persona));
+    const pendientes = (datos.personajes || []).length - personajes.length;
+    if (pendientes) {
+      console.log(`  ${pendientes} personaje(s) sin autoría verificada: no se publican`);
+    }
+  }
 
   const rutas = [];
 
@@ -472,6 +528,21 @@ ${fuentes}
     const resto = articulos.filter(a => a !== destacado);
     const enlaceDestacado = `articulos/${destacado.slug}/index.html`;
 
+    // Muestra de la colección en la portada: los seis más recientes y un
+    // enlace a la página completa. Con más de 400 perfiles en la serie, listar
+    // todo aquí ahogaría el resto de la portada.
+    const muestra = personajes.slice(0, 6);
+    const bloquePersonajes = personajes.length ? `
+      <section class="seccion personajes" aria-labelledby="personajes-titulo">
+        <h2 class="seccion__titulo" id="personajes-titulo">Personajes</h2>
+        <p class="personajes__intro">Perfiles de la serie «Personaje 10» publicados en Página10.com. Los enlaces llevan al artículo original.</p>
+        <ul class="personajes__lista">
+        ${muestra.map(entradaPersonaje).join('\n        ')}
+        </ul>
+        <p class="seccion__mas"><a href="${rel(p, 'personajes/index.html')}">Ver todos los personajes (${personajes.length}) →</a></p>
+      </section>
+` : '';
+
     const recientes = resto.length ? `
       <section class="seccion" aria-labelledby="recientes">
         <h2 class="seccion__titulo" id="recientes">Notas recientes</h2>
@@ -494,7 +565,7 @@ ${fuentes}
             </h2>
             <p class="destacado__bajada">${esc(destacado.bajada)}</p>
             <p class="metadatos">Por ${esc(destacado.autor || sitio.autor)} · <time datetime="${destacado.fecha}">${fechaLarga(destacado.fecha)}</time> · ${destacado.minutos} min de lectura</p>
-            <p><a class="boton" href="${rel(p, enlaceDestacado)}">Leer el análisis</a></p>
+            <p><a class="boton" href="${rel(p, enlaceDestacado)}">Leer más...</a></p>
           </div>
           <figure class="destacado__figura">
             <a href="${rel(p, enlaceDestacado)}" tabindex="-1" aria-hidden="true">
@@ -509,13 +580,13 @@ ${recientes}
         <h2 class="seccion__titulo" id="temas-titulo">Temas</h2>
         ${listaTemas(temas, p, sitio)}
       </section>
-
+${bloquePersonajes}
       <section class="seccion perfil-breve" aria-labelledby="quien">
         <h2 class="seccion__titulo" id="quien">Quién escribe</h2>
         <p>${esc(sitio.bioCorta)}</p>
         <p class="perfil-breve__acciones">
           <a class="boton boton--secundario" href="${rel(p, 'sobre-mi/index.html')}">Sobre mí</a>
-          <a class="boton boton--secundario" href="${rel(p, sitio.cv)}">Ver el CV (PDF)</a>
+          <a class="boton boton--secundario" href="${rel(p, sitio.cv)}">Ver el CV</a>
         </p>
       </section>
     </div>`;
@@ -533,7 +604,7 @@ ${recientes}
     const p = 1;
     const contenido = `    <div class="contenedor contenedor--estrecho">
       <header class="cabecera-seccion">
-        <h1>Análisis</h1>
+        <h1>Publicaciones</h1>
         <p class="bajada">Notas sobre política, elecciones, economía, conflicto y desarrollo territorial.</p>
       </header>
       <div class="lista-notas lista-notas--completa">
@@ -546,8 +617,8 @@ ${recientes}
     </div>`;
     escribir('analisis/index.html', documento({
       sitio, profundidad: p, pagina: 'analisis/index.html', ruta: 'analisis/index.html',
-      titulo: `Análisis · ${sitio.nombre}`,
-      descripcion: 'Todas las notas de análisis publicadas: política, elecciones, economía, conflicto, datos y desarrollo territorial en Nariño y Colombia.',
+      titulo: `Publicaciones · ${sitio.nombre}`,
+      descripcion: 'Todas las publicaciones: política, elecciones, economía, conflicto, datos, desarrollo territorial y cultura en Nariño y Colombia.',
       contenido,
     }));
     rutas.push({ ruta: 'analisis/index.html', fecha: articulos[0].fecha });
@@ -578,6 +649,41 @@ ${recientes}
       contenido,
     }));
     rutas.push({ ruta, fecha: t.notas[0].fecha });
+  }
+
+  // -- Colección de personajes ------------------------------------------------
+  if (personajes.length) {
+    const p = 1;
+    const ruta = 'personajes/index.html';
+    const porAnio = personajesPorAnio(personajes);
+
+    const bloques = porAnio.map(([anio, items]) => `
+        <section class="personajes__anio" aria-labelledby="anio-${anio}">
+          <h2 class="personajes__anio-titulo" id="anio-${anio}">${anio} <span>${items.length}</span></h2>
+          <ul class="personajes__lista">
+          ${items.map(entradaPersonaje).join('\n          ')}
+          </ul>
+        </section>`).join('\n');
+
+    const contenido = `    <div class="contenedor contenedor--estrecho">
+      <header class="cabecera-seccion">
+        <p class="antetitulo">Colección</p>
+        <h1>Personajes</h1>
+        <p class="bajada">Perfiles de nariñenses que escribí para la serie «Personaje 10» de Página10.com: científicos, artistas, docentes, deportistas, médicos, investigadores y gestores culturales.</p>
+      </header>
+
+      <p class="personajes__aviso">Estos textos se publicaron en Página10.com y allí siguen. Este sitio no los reproduce: cada nombre enlaza al artículo original, que se abre en una pestaña nueva.</p>
+${bloques}
+    </div>`;
+
+    escribir(ruta, documento({
+      sitio, profundidad: p, pagina: ruta, ruta,
+      titulo: `Personajes · ${sitio.nombre}`,
+      tituloSocial: `Personajes · ${sitio.nombre}`,
+      descripcion: `Colección de ${personajes.length} perfiles de nariñenses escritos para la serie «Personaje 10» de Página10.com: ciencia, arte, docencia, deporte, medicina y gestión cultural.`,
+      contenido,
+    }));
+    rutas.push({ ruta, fecha: personajes[0].fecha });
   }
 
   // -- Páginas fijas ---------------------------------------------------------

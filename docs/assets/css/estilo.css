@@ -136,7 +136,10 @@ code {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0 1.5rem;
+  /* La separación se encoge en pantallas estrechas para que los cuatro enlaces
+     quepan en una sola fila. Con «Publicaciones» (125 px) y una separación fija
+     de 24 px la fila medía 351 px y se partía en dos justo a 390 px. */
+  gap: 0 clamp(0.7rem, 3.2vw, 1.5rem);
 }
 .menu a {
   display: block;
@@ -348,6 +351,114 @@ code {
 }
 .temas a:hover { border-color: var(--azul); color: var(--azul); }
 .temas span { font-size: 0.75rem; color: var(--gris-tinta); }
+
+/* --------------------------------------------------------- personajes
+
+   Colección de perfiles publicados en Página10.com. Son enlaces externos, así
+   que se listan como un índice tipográfico —filete, nombre, oficio— y no como
+   tarjetas: no son contenido de este sitio y no deben competir visualmente
+   con las notas propias.                                                    */
+
+.personajes__intro,
+.personajes__aviso {
+  max-width: 42rem;
+  margin: 0 0 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--gris-tinta);
+}
+.personajes__aviso {
+  padding: 0.9rem 1.1rem;
+  background: var(--papel-sombra);
+  border-left: 3px solid var(--azul);
+  margin-bottom: 2.5rem;
+}
+
+.personajes__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.personaje {
+  border-bottom: 1px solid var(--filete-suave);
+}
+.personaje:first-child { border-top: 1px solid var(--filete-suave); }
+
+.personaje__enlace {
+  display: block;
+  min-height: 44px;
+  padding: 0.7rem 0;
+  text-decoration: none;
+  color: var(--tinta);
+}
+.personaje__enlace:hover .personaje__persona {
+  color: var(--azul);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.personaje__persona {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.35;
+}
+.personaje__descriptor {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--gris-tinta);
+}
+
+.personajes__anio { margin-bottom: 2.75rem; }
+
+.personajes__anio-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--azul);
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: var(--azul);
+}
+.personajes__anio-titulo span {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gris-tinta);
+}
+
+.personaje__fecha {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--gris-tinta);
+}
+
+@media (min-width: 48em) {
+  .personaje__enlace {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+  }
+  .personaje__texto { flex: 1 1 auto; }
+  .personaje__fecha {
+    flex: 0 0 auto;
+    margin-top: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
 
 /* --------------------------------------------------------- perfil breve */
 
