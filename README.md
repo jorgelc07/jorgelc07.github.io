@@ -35,13 +35,18 @@ web_jorgeluis/
 ├── content/                      ← LO QUE SE EDITA PARA PUBLICAR
 │   ├── sitio.json                    configuración global (URL, nombre, correo, X)
 │   ├── articulos/                    una nota por archivo .md
-│   │   └── narino-paz-territorial-homicidios-coca.md
-│   └── paginas/                      páginas fijas
-│       └── sobre-mi.md
+│   │   ├── narino-paz-territorial-homicidios-coca.md
+│   │   └── elecciones-coca-violencia-mapa-electoral-narino.md
+│   ├── paginas/                      páginas fijas
+│   │   └── sobre-mi.md
+│   ├── personajes.json               colección de perfiles externos (sección 15)
+│   └── urls_personajes.txt           URLs candidatas a verificar
 │
 ├── scripts/                      ← HERRAMIENTAS
 │   ├── build.js                      genera el sitio (Node, sin dependencias)
 │   ├── probar.py                     pruebas automáticas en 5 anchos
+│   ├── verificar_personajes.py       comprueba la autoría en Página10 y el archivo
+│   ├── construir_personajes.py       vuelca lo verificado a personajes.json
 │   ├── extraer_graficos.py           saca los gráficos del .docx y los optimiza
 │   ├── generar_imagenes.py           favicon + tarjetas para compartir en X
 │   ├── preparar_documentos.py                CV sin teléfono + PDF sin metadatos
@@ -49,7 +54,8 @@ web_jorgeluis/
 │
 ├── docs/                         ← EL SITIO PUBLICADO (generado, no editar a mano)
 │   ├── index.html                    portada
-│   ├── analisis/                     listado de notas
+│   ├── analisis/                     listado de publicaciones (etiqueta: «Publicaciones»)
+│   ├── personajes/                   colección de perfiles externos
 │   ├── articulos/<slug>/             cada nota
 │   ├── temas/<slug>/                 páginas por tema
 │   ├── sobre-mi/                     perfil
@@ -346,6 +352,21 @@ con HTTPS forzado.
   Este sitio pesa ~5 MB; con el tráfico previsto no se acerca ni de lejos.
 - **Nunca pide medio de pago.**
 
+### El repositorio tiene que seguir siendo público
+
+En el plan **GitHub Free**, GitHub Pages solo publica desde repositorios
+**públicos**. Servir un sitio desde un repositorio privado exige GitHub Pro,
+Team o Enterprise, que son de pago.
+
+O sea: hacer privado este repositorio **apagaría el sitio**, y volver a
+encenderlo costaría una suscripción. Por eso el repositorio es público a
+propósito, y por eso importa la regla de la sección 13.6: todo lo que entre en
+el repositorio es visible para cualquiera.
+
+Si algún día hiciera falta que el código no fuera público sin pagar, la salida
+sería mover el alojamiento a Cloudflare Pages o Netlify, que sí sirven sitios
+desde repositorios privados en su plan gratuito.
+
 ### Si algún día hace falta cambiar
 
 El sitio es HTML estático, así que se mueve a cualquier parte sin tocar código:
@@ -507,7 +528,19 @@ intactos en `originales/nota2_elecciones_coca_violencia/graficos/`.
 > La `v3` corrigió esas notas pero rompió el título; recortar el título de la
 > `v3` conserva lo bueno de ambas.
 
-### 14.3 Limitaciones conocidas
+### 14.3 Navegación: «Publicaciones» con URL `/analisis/`
+
+La pestaña del menú se llama **Publicaciones**, pero la ruta sigue siendo
+`/analisis/`. No es un descuido: la URL ya está en el sitemap y puede estar
+compartida, y GitHub Pages no hace redirecciones de servidor —solo se pueden
+imitar con una página que se recarga sola, que los buscadores tratan peor que
+un 301 real—. La incoherencia es invisible para el lector; romper enlaces
+publicados, no.
+
+Está en un solo sitio de `scripts/build.js`, en la lista `enlaces` de la
+función `cabecera()`, por si algún día conviene cambiarla.
+
+### 14.4 Limitaciones conocidas
 
 - Las figuras de la segunda nota son de 1.500 px de ancho (1.353 las de
   dispersión), por debajo de los 1.600 px del resto. Son las de mayor
@@ -520,3 +553,157 @@ intactos en `originales/nota2_elecciones_coca_violencia/graficos/`.
   la investigación.
 - La segunda nota trabaja con datos electorales **preliminares** (preconteo,
   boletín #67). Así lo dicen sus propias figuras y así quedó en las notas.
+
+---
+
+## 15. La colección «Personajes»
+
+Perfiles de nariñenses que escribí para la serie **«Personaje 10»** de
+Página10.com entre 2018 y 2019: científicos, artistas, docentes, deportistas,
+médicos, investigadores y gestores culturales.
+
+### Qué se publica y qué no
+
+**Este sitio no reproduce esos textos.** Cada entrada muestra solo el nombre de
+la persona, su oficio y el año, y enlaza al artículo original en Página10.com,
+que se abre en una pestaña nueva (`target="_blank"` con
+`rel="noopener noreferrer"`).
+
+Es una decisión deliberada, por tres razones:
+
+1. Los textos se publicaron en Página10 y allí siguen; republicarlos completos
+   sería duplicar contenido ajeno a su casa editorial.
+2. Página10 puso su archivo histórico tras un muro de pago. Copiar aquí lo que
+   allí se cobra sería, además de discutible, desleal.
+3. Duplicar contenido perjudica el posicionamiento de ambos sitios.
+
+### Verificación de autoría
+
+La serie «Personaje 10» tiene **más de 470 entradas** en Página10 y la
+escribieron distintas personas a lo largo de los años. Que una nota lleve ese
+título no significa que sea mía. Por eso la colección **no se rastrea
+automáticamente**: contiene solo las URLs añadidas a mano en
+`content/urls_personajes.txt`, y crece de una en una.
+
+Página10 atribuye estas notas a autores genéricos en los metadatos
+(«Columnista Invitado», «Página 10»), así que los metadatos no sirven para
+decidir. La firma real está **dentro del cuerpo**, al final del artículo:
+
+> Por: Jorge Luis Congacha Yunda
+
+`scripts/verificar_personajes.py` busca exactamente esa firma y **solo** marca
+una nota como verificada si la encuentra. Dónde busca:
+
+1. **La página en vivo.** Desde 2026 el archivo histórico está tras un muro de
+   pago que muestra únicamente el primer párrafo, y la firma va al final, así
+   que casi nunca aparece ahí.
+2. **El Internet Archive.** Guardó estas páginas completas antes del muro. Se
+   sondean varios años con
+   `https://web.archive.org/web/<año>id_/<url>`.
+
+Si ninguna de las dos vías da la firma, la nota **no se publica**: queda en
+`content/personajes.json` con `autoria_verificada: false` y el generador la
+ignora. Nunca se atribuye una nota por parecido de tema o de fecha.
+
+> **Cuidado con la API CDX del Internet Archive.** Se probó primero y hubo que
+> descartarla: cuando limita por exceso de peticiones devuelve una lista vacía
+> con estado 200, exactamente igual que cuando una página nunca se archivó. Con
+> eso se descartaron por error notas que sí estaban archivadas. El sondeo
+> directo por año distingue bien los dos casos, porque una URL no archivada
+> responde 404 de verdad.
+
+### Alcance: crece a mano, no por rastreo
+
+La colección **no** intenta reconstruir la serie histórica completa. Se limita
+a los enlaces añadidos explícitamente a `content/urls_personajes.txt`. Es una
+decisión de control: un rastreo de cientos de notas obligaría a verificar la
+autoría de cada una y traería más ruido que valor.
+
+### Añadir más personajes
+
+```bash
+# 1. Añadir la URL al final de la lista
+echo "https://pagina10.com/web/…/" >> content/urls_personajes.txt
+
+# 2. Comprobar la autoría (lento a propósito: no castiga sitios ajenos)
+python3 scripts/verificar_personajes.py
+
+# 3. Volcar el resultado a la estructura de datos
+python3 scripts/construir_personajes.py
+
+# 4. Revisar a mano content/personajes.json: el nombre y el oficio se deducen
+#    del título y conviene comprobarlos
+
+# 5. Generar y publicar
+node scripts/build.js && git add -A && git commit -m "Añade personajes" && git push
+```
+
+### Estructura de datos
+
+`content/personajes.json`, una entrada por perfil:
+
+| Campo | Para qué |
+|---|---|
+| `persona` | Nombre, tal como se muestra |
+| `descriptor` | Oficio o motivo del perfil |
+| `titulo` | Título original de la nota |
+| `fecha` / `anio` | Fecha real de publicación en Página10, de sus metadatos |
+| `url` | Enlace al artículo original |
+| `fuente` / `serie` | «Página10.com» / «Personaje 10» |
+| `autoria_verificada` | Si es `false`, el generador la ignora |
+| `verificada_en` | Dónde se encontró la firma |
+| `evidencia_autoria` | El fragmento con la firma |
+
+Las fechas **no se inventan**: salen de `article:published_time` de cada nota.
+
+### Por qué no son un «tema»
+
+Los temas (Nariño, Elecciones, Datos, Conflicto y violencia) clasifican lo que
+se publica **en este sitio**. Personajes es una colección de enlaces externos y
+va aparte: no entra en los temas, ni en el RSS, ni en el listado de
+publicaciones. Tampoco se fuerzan todos bajo «Cultura», porque hay científicos,
+médicos, deportistas e investigadores.
+
+### Dónde aparece
+
+- **Portada:** bloque «Personajes» entre «Temas» y «Quién escribe», con los seis
+  más recientes y un enlace a la colección completa.
+- **`/personajes/`:** todos, agrupados por año de más reciente a más antiguo.
+
+---
+
+## 16. Qué es público y qué se queda en el computador
+
+El repositorio es público. Antes de añadir cualquier cosa, conviene saber en
+qué lado cae.
+
+### Se publica (está en GitHub y lo ve cualquiera)
+
+| Qué | Dónde |
+|---|---|
+| El sitio entero | `docs/` |
+| Textos de las notas | `content/articulos/*.md` |
+| Perfil | `content/paginas/sobre-mi.md` |
+| Configuración del sitio | `content/sitio.json` |
+| Colección de personajes y su lista de URLs | `content/personajes.json`, `content/urls_personajes.txt` |
+| Herramientas | `scripts/` |
+| Documentación | `README.md`, `docs-proyecto/` |
+| **CV sin teléfono** | `docs/assets/documentos/cv-jorge-luis-congacha.pdf` |
+| Originales de las notas y sus gráficos | `originales/` (salvo lo de abajo) |
+
+### No se publica (solo local, vía `.gitignore`)
+
+| Qué | Por qué |
+|---|---|
+| `originales/CV - Jorge Luis Congacha.pdf` | **Lleva el número de teléfono.** Lo que se publica es la copia redactada |
+| `pruebas/capturas/` | 40 capturas que se regeneran solas |
+| `scripts/.cache-fuentes/` | Tipografías TTF que se descargan solas |
+
+`pruebas/verificacion_personajes.json` **sí** se versiona: es el comprobante de
+autoría de cada perfil y conviene conservarlo.
+
+### Antes de añadir algo nuevo
+
+Preguntarse si molestaría verlo indexado en Google. Si la respuesta es sí, va
+al `.gitignore` **antes** del primer commit: borrarlo después no lo quita del
+historial de git.

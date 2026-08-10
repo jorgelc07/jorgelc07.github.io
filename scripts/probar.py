@@ -20,6 +20,7 @@ Usa el Chrome ya instalado en el equipo (channel="chrome"): no descarga nada.
 Uso:  python3 scripts/probar.py
 """
 import http.server
+import json
 import os
 import re
 import socketserver
@@ -50,6 +51,7 @@ PAGINAS = [
     ("sobre-mi", "/sobre-mi/"),
     ("tema", "/temas/narino/"),
     ("tema-elecciones", "/temas/elecciones/"),
+    ("personajes", "/personajes/"),
     ("404", "/404.html"),
 ]
 
@@ -123,6 +125,61 @@ def revisar_html_estatico():
         if faltan:
             fallo(rel, "faltan metaetiquetas: " + ", ".join(faltan))
     print(f"  {len(archivos)} archivos revisados")
+
+
+def revisar_enlaces_externos():
+    """
+    Los enlaces de la colección Personajes salen del sitio y se abren en una
+    pestaña nueva. Con target="_blank" hace falta rel="noopener": sin él, la
+    página de destino puede manipular la nuestra por window.opener.
+
+    El estado HTTP de cada URL no se comprueba aquí —serían decenas de
+    peticiones a un sitio ajeno en cada corrida—; de eso se encarga
+    scripts/verificar_personajes.py, que además guarda el comprobante.
+    """
+    print("\n— Enlaces externos —")
+    total = 0
+    for base, _, nombres in os.walk(DOCS):
+        for n in nombres:
+            if not n.endswith(".html"):
+                continue
+            archivo = os.path.join(base, n)
+            rel = os.path.relpath(archivo, DOCS)
+            texto = open(archivo, encoding="utf8").read()
+            for m in re.finditer(r"<a\b[^>]*>", texto):
+                etiqueta = m.group(0)
+                if 'target="_blank"' not in etiqueta:
+                    continue
+                total += 1
+                if "noopener" not in etiqueta:
+                    fallo(rel, f"target=_blank sin rel=noopener → {etiqueta[:90]}")
+                if not re.search(r'href="https?://', etiqueta):
+                    fallo(rel, f"target=_blank en enlace no externo → {etiqueta[:90]}")
+
+    # Todo personaje publicado tiene que venir de una verificación de autoría.
+    datos = os.path.join(RAIZ, "content", "personajes.json")
+    if os.path.exists(datos):
+        with open(datos, encoding="utf8") as f:
+            pjs = json.load(f).get("personajes", [])
+        publicados = [p for p in pjs if p.get("autoria_verificada")]
+        sin_prueba = [p["persona"] for p in publicados if not p.get("evidencia_autoria")]
+        for p in sin_prueba:
+            fallo("personajes.json", f"publicado sin evidencia de autoría → {p}")
+        html_col = os.path.join(DOCS, "personajes", "index.html")
+        if publicados and os.path.exists(html_col):
+            texto = open(html_col, encoding="utf8").read()
+            faltan = [p["persona"] for p in publicados if p["url"] not in texto]
+            for p in faltan:
+                fallo("personajes/index.html", f"verificado pero no aparece → {p}")
+        no_verificados = len(pjs) - len(publicados)
+        for p in pjs:
+            if not p.get("autoria_verificada") and os.path.exists(html_col):
+                if p["url"] in open(html_col, encoding="utf8").read():
+                    fallo("personajes/index.html",
+                          f"publicado SIN autoría verificada → {p['persona']}")
+        print(f"  {len(publicados)} personaje(s) publicado(s), "
+              f"{no_verificados} retenido(s) por autoría sin verificar")
+    print(f"  {total} enlace(s) con target=_blank comprobados")
 
 
 def revisar_enlaces_internos():
@@ -294,6 +351,7 @@ def main():
     try:
         revisar_html_estatico()
         revisar_enlaces_internos()
+        revisar_enlaces_externos()
         revisar_en_navegador()
     finally:
         srv.shutdown()

@@ -325,3 +325,79 @@ Lo que habrá que hacer llegado el momento:
 
 Lo que conviene **no** hacer: migrar a un framework porque el sitio creció. Con
 200 notas esto sigue generándose en menos de un segundo.
+
+---
+
+## 15. «Publicaciones» en el menú, `/analisis/` en la URL
+
+**Decisión:** la etiqueta visible del menú pasa de «Análisis» a «Publicaciones»,
+pero la ruta sigue siendo `/analisis/`.
+
+El sitio ya está indexado, la URL está en el sitemap y puede estar compartida.
+Cambiarla obligaría a redirigir, y GitHub Pages no hace redirecciones de
+servidor: solo se pueden imitar con una página que se recarga sola, que no es
+un 301 de verdad y que los buscadores tratan peor.
+
+La incoherencia entre etiqueta y ruta es invisible para el lector y no cuesta
+nada; romper enlaces publicados, sí. Si algún día conviene cambiarla, el
+momento es antes de que haya enlaces externos apuntando ahí.
+
+---
+
+## 16. Personajes: enlazar, no republicar
+
+**Decisión:** la colección muestra nombre, oficio y año, y enlaza al artículo
+original en Página10.com. No se copia el texto.
+
+Se consideró republicar los perfiles completos —el autor es el mismo— y se
+descartó por tres razones que apuntan en la misma dirección: los textos son de
+la casa editorial donde salieron, Página10 cobra hoy por su archivo histórico y
+duplicar contenido perjudica el posicionamiento de los dos sitios.
+
+Como son enlaces externos, se abren en pestaña nueva. `rel="noopener noreferrer"`
+no es decorativo: sin `noopener`, la página de destino puede manipular la
+nuestra a través de `window.opener`.
+
+**No entran en los temas ni en el RSS.** Los temas clasifican lo que se publica
+aquí; el RSS anuncia lo que se publica aquí. Meter en ellos enlaces a otro sitio
+mezclaría dos cosas distintas y ensuciaría ambas.
+
+---
+
+## 17. Verificar la autoría antes de atribuirse nada
+
+La serie «Personaje 10» tiene más de 470 entradas y la escribieron varias
+personas durante años. El título no dice nada sobre quién la escribió.
+
+**Decisión:** solo se publica lo que lleva la firma «Por: Jorge Luis Congacha
+Yunda» en el cuerpo del artículo. Sin firma, la entrada se queda en el archivo
+de datos marcada como no verificada y el generador la ignora.
+
+Los metadatos de Página10 no sirven: atribuyen estas notas a «Columnista
+Invitado» o a «Página 10». Se comprobó que dos notas con metadatos distintos
+tienen las dos la misma firma real en el cuerpo, así que filtrar por metadatos
+habría dado un resultado sencillamente falso.
+
+El problema práctico es que desde 2026 el archivo histórico de Página10 está
+tras un muro de pago que solo muestra el primer párrafo, y la firma va al final.
+La solución fue el Internet Archive, que guardó las páginas completas antes del
+muro. Es gratuito y público.
+
+> **Dos trampas que costaron tiempo.** La primera: la API CDX del Internet
+> Archive, cuando limita por exceso de peticiones, devuelve una lista vacía con
+> estado 200 —idéntica a «esta página nunca se archivó»—, y con eso se
+> descartaron por error notas que sí estaban archivadas. Se cambió por el sondeo
+> directo `web/<año>id_/<url>`, donde una URL no archivada responde 404 de
+> verdad. La segunda: la primera pasada buscó la firma solo en la página en
+> vivo y dio 1 de 21; el problema no era la autoría, era el muro de pago.
+
+Lo que no se puede verificar no se publica. Es preferible una colección más
+corta y correcta que una más larga con atribuciones dudosas.
+
+**Alcance deliberadamente cerrado.** Se llegó a explorar el sitemap de Página10
+para reconstruir la serie completa y se descartó: son más de 470 notas de
+autorías mezcladas, verificarlas todas exigiría cientos de peticiones a dos
+sitios ajenos y el resultado sería una colección grande y ruidosa en vez de una
+pequeña y exacta. La colección contiene solo las URLs añadidas a mano y crece
+de una en una.
+

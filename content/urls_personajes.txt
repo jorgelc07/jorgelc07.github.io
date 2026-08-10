@@ -1,0 +1,39 @@
+# Notas de la serie «Personaje 10» de Página10.com candidatas a entrar en la
+# colección /personajes/ del sitio.
+#
+# Una URL por línea. Las líneas que empiezan por # se ignoran.
+# Después de añadir una URL aquí:
+#     python3 scripts/verificar_personajes.py
+# y, si la autoría queda verificada, se añade la entrada a content/personajes.json.
+#
+# El script solo da por buena la autoría cuando encuentra la firma
+# «Por: Jorge Luis Congacha [Yunda]» dentro del cuerpo de la nota, porque los
+# metadatos de Página10 son genéricos («Columnista Invitado», «Página 10»).
+#
+# ALCANCE: esta colección contiene únicamente los enlaces suministrados a mano.
+# NO se rastrea Página10 en busca de más notas de la serie. «Personaje 10» fue
+# una sección de la casa con más de 470 entradas escritas por distintas
+# personas a lo largo de los años, así que la colección crece añadiendo URLs
+# aquí de una en una, no automáticamente.
+
+https://pagina10.com/web/destacado-docente-gestor-social-y-gerente-arturo-fidel-diaz-teran-es-el-personaje-10/
+https://pagina10.com/web/destacada-medica-diana-vanessa-suarez-ayala-es-la-personaje-10-del-dia/
+https://pagina10.com/web/estudiante-del-massachusetts-institute-of-technology-mit-paola-molina-realpe-es-la-personaje-10-del-dia/
+https://pagina10.com/web/cirujano-cardiovascular-wertino-pabon-es-el-personaje-10-del-dia/
+https://pagina10.com/web/destacada-artista-alicia-viteri-es-la-personaje-10-del-dia/
+https://pagina10.com/web/destacado-disenador-jose-argotty-es-el-personaje-10-del-dia/
+https://pagina10.com/web/actor-tumaqueno-jair-salinas-es-el-personaje-10-del-dia/
+https://pagina10.com/web/escritor-tumaqueno-oscar-seidel-morales-es-el-personaje-10-del-dia/
+https://pagina10.com/web/el-pintor-de-los-andes-manuel-guerrero-mora-es-el-personaje-10-del-dia/
+https://pagina10.com/web/destacada-docente-e-investigadora-isabel-goyes-moreno-es-la-personaje-10-del-dia/
+https://pagina10.com/web/productora-audiovisual-andrea-feuillet-rodriguez-es-la-personaje-10-del-dia/
+https://pagina10.com/web/organizador-del-concierto-de-marc-anthony-en-pasto-jair-ruano-es-el-personaje-10-del-dia/
+https://pagina10.com/web/humorista-harold-huertas-es-el-personaje-10-del-dia/
+https://pagina10.com/web/productor-y-musico-javier-martinez-maya-es-el-personaje-10-del-dia/
+https://pagina10.com/web/piloto-de-automovilismo-julio-sebastian-acosta-es-el-personaje-10-del-dia/
+https://pagina10.com/web/senadora-pastusa-en-los-estados-unidos-patricia-torres-ray-es-la-personaje-10-del-dia/
+https://pagina10.com/web/exjugador-del-deportivo-pasto-carlos-rendon-es-el-personaje-10-del-dia/
+https://pagina10.com/web/autoridad-en-el-campo-de-la-botanica-luis-eduardo-mora-osejo-es-el-personaje-10-del-dia/
+https://pagina10.com/web/primer-director-de-la-universidad-nacional-de-colombia-sede-tumaco-herbert-giraldo-gomez-es-el-personaje-10-del-dia/
+https://pagina10.com/web/maestro-del-carnaval-de-negros-y-blancos-carlos-ribert-insuasty-es-el-personaje-10-del-dia/
+https://pagina10.com/web/director-de-cine-juan-carlos-melo-guevara-es-el-personaje-10-del-dia/
