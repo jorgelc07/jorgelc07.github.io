@@ -48,9 +48,11 @@ PAGINAS = [
     ("analisis", "/analisis/"),
     ("nota-narino", "/articulos/narino-paz-territorial-homicidios-coca/"),
     ("nota-elecciones", "/articulos/elecciones-coca-violencia-mapa-electoral-narino/"),
+    ("nota-salud", "/articulos/salud-narino-cobertura-reclamos-red-publica/"),
     ("sobre-mi", "/sobre-mi/"),
     ("tema", "/temas/narino/"),
     ("tema-elecciones", "/temas/elecciones/"),
+    ("tema-salud", "/temas/salud/"),
     ("personajes", "/personajes/"),
     ("404", "/404.html"),
 ]

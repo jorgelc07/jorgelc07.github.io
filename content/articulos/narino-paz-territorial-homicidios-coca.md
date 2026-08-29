@@ -11,7 +11,7 @@ imagen: assets/img/graficos/fig01-homicidios-narino-colombia-2010-2025.png
 pieDestacado: Figura 1. Homicidios y tasa de homicidios en Nariño y Colombia, 2010–2025.
 imagenSocial: assets/img/social/narino-paz-territorial-homicidios-coca.png
 pdf: assets/documentos/narino-paz-territorial-homicidios-coca.pdf
-destacado: true
+destacado: false
 fuentes: ["Policía Nacional. Homicidios y casos de extorsión registrados en Nariño.", "DANE. Proyecciones de población, usadas para calcular las tasas por 100.000 habitantes.", "SIMCI/UNODC. Hectáreas de coca detectadas, con corte al 31 de diciembre de 2024.", "Centro Nacional de Memoria Histórica, Observatorio de Memoria y Conflicto. Asesinatos selectivos documentados.", "RNI – Unidad para las Víctimas. Amenazas y desplazamiento forzado individual, por año de ocurrencia.", "geoBoundaries. Geometría municipal utilizada en los mapas.", "Defensoría del Pueblo. Alertas por reclutamiento de niños, niñas y adolescentes, citadas en el texto.", "Presidencia de la República. Avances reportados del programa de sustitución de cultivos, citados en el texto."]
 ---
 

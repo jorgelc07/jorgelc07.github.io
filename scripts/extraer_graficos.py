@@ -75,6 +75,20 @@ NOTAS = {
             "elec03-mapa-cambio-izquierda-y-coca": {"abajo": 979},
         },
     },
+    "salud": {
+        "docx": "originales/nota3_salud_narino/Salud_en_Narino_nota_final.docx",
+        "originales": "originales/nota3_salud_narino/graficos",
+        "nombres": [
+            "sal01-cobertura-afiliacion-departamentos-2026",
+            "sal02-aseguramiento-eps-narino-2018-2026",
+            "sal03-eps-con-mas-afiliados-por-municipio",
+            "sal04-emssanar-medidas-especiales-2019-2027",
+            "sal05-reclamos-suroccidente-2024-2026",
+            "sal06-crecimiento-reclamos-indice-2024-2026",
+            "sal07-tutelas-salud-colombia-2021-2025",
+            "sal08-ese-saneamiento-pacifico-2026",
+        ],
+    },
 }
 
 

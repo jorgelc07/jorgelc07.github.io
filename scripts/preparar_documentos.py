@@ -36,6 +36,9 @@ NOTAS = [
     ("nota2_elecciones_coca_violencia/Elecciones_coca_violencia_narino.pdf",
      "elecciones-coca-violencia-mapa-electoral-narino.pdf",
      "Elecciones, coca y violencia: mapa electoral de Nariño"),
+    ("nota3_salud_narino/Salud_en_Narino_nota_final.pdf",
+     "salud-narino-cobertura-reclamos-red-publica.pdf",
+     "Salud en Nariño: cobertura, reclamos y una red pública bajo presión"),
 ]
 
 

@@ -527,6 +527,9 @@ ${fuentes}
     const destacado = articulos.find(a => a.destacado) || articulos[0];
     const resto = articulos.filter(a => a !== destacado);
     const enlaceDestacado = `articulos/${destacado.slug}/index.html`;
+    // Medidas reales del gráfico: hay notas cuya imagen destacada es vertical
+    // (un mapa) y otras apaisadas. Fijar un tamaño único deformaría unas u otras.
+    const medDestacada = medidaPNG(path.join(SALIDA, destacado.imagen)) || { w: 1600, h: 896 };
 
     // Muestra de la colección en la portada: los seis más recientes y un
     // enlace a la página completa. Con más de 400 perfiles en la serie, listar
@@ -569,7 +572,7 @@ ${fuentes}
           </div>
           <figure class="destacado__figura">
             <a href="${rel(p, enlaceDestacado)}" tabindex="-1" aria-hidden="true">
-              <img src="${rel(p, destacado.imagen)}" alt="" width="1600" height="896" decoding="async">
+              <img src="${rel(p, destacado.imagen)}" alt="" width="${medDestacada.w}" height="${medDestacada.h}" decoding="async">
             </a>
             <figcaption>${esc(destacado.pieDestacado || '')}</figcaption>
           </figure>
