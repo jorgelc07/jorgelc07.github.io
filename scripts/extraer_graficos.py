@@ -89,6 +89,23 @@ NOTAS = {
             "sal08-ese-saneamiento-pacifico-2026",
         ],
     },
+    # Esta nota no trae "docx": sus figuras no se extraen del documento sino de
+    # los PNG originales del proyecto que las generó, que están en mayor
+    # resolución (3500 px) que las copias recomprimidas que quedaron dentro del
+    # Word. Ya se copiaron a originales/ con el nombre web que les corresponde,
+    # así que aquí solo se optimizan.
+    "incendios": {
+        "originales": "originales/nota4_incendios_narino/graficos",
+        "nombres": [
+            "inc01-incendios-narino-acumulado-agosto-septiembre-2026",
+            "inc02-incendios-narino-agosto-2026",
+            "inc03-incendios-narino-septiembre-2026",
+        ],
+        # Mapas compuestos con rótulos de municipio y notas al pie muy pequeños:
+        # a 1600 px el texto del detalle se empasta. Se conserva más resolución
+        # que en el resto de las notas para que siga siendo legible.
+        "ancho": 2200,
+    },
 }
 
 
@@ -108,12 +125,13 @@ def orden_imagenes(z):
 
 
 def procesar(clave, cfg):
-    docx = os.path.join(RAIZ, cfg["docx"])
     orig = os.path.join(RAIZ, cfg["originales"])
     nombres = cfg["nombres"]
     recortes = cfg.get("recortes", {})
+    ancho_max = cfg.get("ancho", ANCHO_MAX)
 
-    if not os.path.exists(docx):
+    docx = os.path.join(RAIZ, cfg["docx"]) if cfg.get("docx") else None
+    if docx and not os.path.exists(docx):
         print(f"  ! no está {cfg['docx']}, se omite")
         return
 
@@ -121,13 +139,19 @@ def procesar(clave, cfg):
     os.makedirs(orig, exist_ok=True)
     os.makedirs(WEB, exist_ok=True)
 
-    with zipfile.ZipFile(docx) as z:
-        rutas = orden_imagenes(z)
-        assert len(rutas) == len(nombres), \
-            f"{clave}: esperaba {len(nombres)} figuras, el documento trae {len(rutas)}"
-        for ruta, nombre in zip(rutas, nombres):
-            with z.open(ruta) as f, open(os.path.join(orig, nombre + ".png"), "wb") as g:
-                shutil.copyfileobj(f, g)
+    if docx:
+        with zipfile.ZipFile(docx) as z:
+            rutas = orden_imagenes(z)
+            assert len(rutas) == len(nombres), \
+                f"{clave}: esperaba {len(nombres)} figuras, el documento trae {len(rutas)}"
+            for ruta, nombre in zip(rutas, nombres):
+                with z.open(ruta) as f, open(os.path.join(orig, nombre + ".png"), "wb") as g:
+                    shutil.copyfileobj(f, g)
+    else:
+        # Sin docx: los originales ya están puestos a mano en originales/.
+        for nombre in nombres:
+            ruta = os.path.join(orig, nombre + ".png")
+            assert os.path.exists(ruta), f"{clave}: falta {os.path.relpath(ruta, RAIZ)}"
 
     total_o = total_w = 0
     for nombre in nombres:
@@ -138,9 +162,9 @@ def procesar(clave, cfg):
             r = recortes[nombre]
             im = im.crop((0, r.get("arriba", 0), im.width, r.get("abajo", im.height)))
 
-        if im.width > ANCHO_MAX:
-            alto = round(im.height * ANCHO_MAX / im.width)
-            im = im.resize((ANCHO_MAX, alto), Image.LANCZOS)
+        if im.width > ancho_max:
+            alto = round(im.height * ancho_max / im.width)
+            im = im.resize((ancho_max, alto), Image.LANCZOS)
 
         png = os.path.join(WEB, nombre + ".png")
         webp = os.path.join(WEB, nombre + ".webp")

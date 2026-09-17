@@ -11,7 +11,7 @@ imagen: assets/img/graficos/sal03-eps-con-mas-afiliados-por-municipio.png
 pieDestacado: Figura 3. EPS con más afiliados en cada municipio de Nariño, julio de 2026.
 imagenSocial: assets/img/social/salud-narino-cobertura-reclamos-red-publica.png
 pdf: assets/documentos/salud-narino-cobertura-reclamos-red-publica.pdf
-destacado: true
+destacado: false
 fuentes: ["Ministerio de Salud y Protección Social. Afiliados al sistema de salud por departamento y municipio, corte a julio de 2026.", "DANE. Proyecciones de población, usadas como denominador de las coberturas y de las tasas por 100.000 habitantes.", "Superintendencia Nacional de Salud. Actos administrativos sobre Emssanar y estadísticas de reclamos en salud, hasta el segundo trimestre de 2026.", "Corte Constitucional. Tutelas relacionadas con salud por departamento, 2021-2025.", "Ministerio de Salud y Protección Social. Resolución 1020 de 2026, Empresas Sociales del Estado bajo Programa de Saneamiento Fiscal y Financiero.", "ADRES. Giro directo de los recursos de la UPC reconocidos a Emssanar, enero-junio de 2026.", "Asociación Colombiana de Hospitales y Clínicas. Cartera de Emssanar con las 225 clínicas y hospitales que reportaban información al 31 de diciembre de 2024.", "Instituto Departamental de Salud de Nariño. Cifras de deuda con la red pública y con la red privada, citadas en el texto.", "El Tiempo. Declaraciones de la directora del Instituto Departamental de Salud de Nariño sobre el Hospital Civil de Ipiales, citadas en el texto."]
 ---
 
