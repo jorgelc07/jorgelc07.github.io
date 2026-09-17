@@ -39,6 +39,9 @@ NOTAS = [
     ("nota3_salud_narino/Salud_en_Narino_nota_final.pdf",
      "salud-narino-cobertura-reclamos-red-publica.pdf",
      "Salud en Nariño: cobertura, reclamos y una red pública bajo presión"),
+    ("nota4_incendios_narino/Incendios_en_Narino_Nota.pdf",
+     "incendios-narino-hectareas-quemadas-agosto-septiembre.pdf",
+     "Incendios en Nariño: cerca de 2.700 hectáreas quemadas entre agosto y septiembre"),
 ]
 
 

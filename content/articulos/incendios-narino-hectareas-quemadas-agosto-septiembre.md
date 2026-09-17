@@ -10,6 +10,7 @@ descripcion: Entre el 1 de agosto y el 15 de septiembre de 2026 se identificaron
 imagen: assets/img/graficos/inc01-incendios-narino-acumulado-agosto-septiembre-2026.png
 pieDestacado: Figura 1. Incendios en Nariño, 1 de agosto–15 de septiembre de 2026.
 imagenSocial: assets/img/social/incendios-narino-hectareas-quemadas-agosto-septiembre.png
+pdf: assets/documentos/incendios-narino-hectareas-quemadas-agosto-septiembre.pdf
 destacado: true
 fuentes: ["NASA FIRMS. Detecciones de actividad térmica del sensor VIIRS, utilizadas para localizar y fechar señales asociadas a posibles incendios.", "ESA Copernicus. Imágenes Sentinel-2 anteriores y posteriores a cada evento, con las que se delimitó la superficie quemada mediante el índice dNBR.", "Imágenes Landsat, utilizadas como referencia adicional cuando fue necesario.", "geoBoundaries (DANE 2020). Límites municipales empleados en los mapas.", "IDEAM. Confirmación de la presencia de El Niño en septiembre de 2026, probabilidad de que alcance una intensidad muy fuerte durante el último trimestre de 2026 y comienzos de 2027, y advertencias sobre el riesgo de incendios de cobertura vegetal."]
 ---
